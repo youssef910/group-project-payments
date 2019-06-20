@@ -11,11 +11,37 @@ class Payment extends Component {
     };
   }
 
-  electCurrency = (event) => {
+  selectCurrency = (event) => {
     const currency = event.target.value;
     this.setState({
       selectedCurrency: currency
     });
+  };
+
+  handleAmount = (event) => {
+    const amount = event.target.value;
+    console.log(amount);
+    this.setState({
+      amount: amount
+    });
+  };
+
+  convertAmount = (event) => {
+    console.log(this.state.selectedCurrency);
+    var url = "https://api.exchangeratesapi.io/latest?base=GBP";
+    fetch(url)
+      .then((resp) => resp.json())
+      .then((rate) => {
+        let rateValue = rate.rates[this.state.selectedCurrency];
+        //console.log(rate.rates[this.state.selectedCurrency])
+        console.log(rateValue);
+        let result = this.state.amount * rateValue;
+        //console.log(result)
+
+        this.setState({
+          result: result
+        });
+      });
   };
 
   render() {
@@ -28,10 +54,15 @@ class Payment extends Component {
               <option key={index}>{currency}</option>
             ))}
           </select>
-          <input className="CalcPayment-amount" type="text" defaultValue="0.00" />
-          is worth <span className="CalcPayment-result">???</span> in GBP.
+          <input
+            onChange={this.handleAmount}
+            className="CalcPayment-amount"
+            type="text"
+            defaultValue="0.00"
+          />
+          is worth <span className="CalcPayment-result">{this.state.result}</span> in GBP.
           <div className="CalcPayment-calculate">
-            <Button>Calculate</Button>
+            <Button onClick={this.convertAmount}>Calculate</Button>
           </div>
         </div>
       </div>
