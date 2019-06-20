@@ -57,7 +57,7 @@ class Payment extends Component {
           <input
             onChange={this.handleAmount}
             className="CalcPayment-amount"
-            type="text"
+            type="Number"
             defaultValue="0.00"
           />
           is worth <span className="CalcPayment-result">{this.state.result}</span> in GBP.

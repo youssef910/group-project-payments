@@ -7,6 +7,7 @@ const currencies = [
   "CNY",
   "CZK",
   "DKK",
+  "EUR",
   "GBP",
   "HKD",
   "HRK",
