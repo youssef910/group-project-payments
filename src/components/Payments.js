@@ -1,13 +1,37 @@
 import React, { Component } from "react";
 import Button from "../components/Button";
 import "./Payments.css";
-import payments from "../data/payments.js";
 
-class Payments extends Component {
+class TableRow extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      paymentData: payments
+      paymentData: this.props.paymentData
+    };
+  }
+
+  render() {
+    return (
+      <tr>
+        <td>{this.props.payment.date}</td>
+        <td>{this.props.payment.currency}</td>
+        <td>{this.props.payment.amount}</td>
+        <td>{this.props.payment.description}</td>
+        <td>{this.props.payment.status}</td>
+        <td>
+          {this.props.payment.status === "Pending" ? (
+            <Button onClick={this.props.cancelPendingPayments}>Cancel</Button>
+          ) : null}
+        </td>
+      </tr>
+    );
+  }
+}
+class Table extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      paymentData: this.props.paymentData
     };
   }
 
@@ -29,8 +53,8 @@ class Payments extends Component {
 
   render() {
     return (
-      <div>
-        <table className="Payments">
+      <table className="Payments">
+        <thead>
           <tr>
             <th>Date</th>
             <th>Cur</th>
@@ -39,35 +63,58 @@ class Payments extends Component {
             <th>Status</th>
             <th>Action</th>
           </tr>
-          {this.state.paymentData.map((amount) => {
-            return (
-              <tr>
-                <td>{amount.date}</td>
-                <td>{amount.currency}</td>
-                <td>{amount.amount}</td>
-                <td>{amount.description}</td>
-                <td>{amount.status}</td>
-                <td>
-                  {" "}
-                  {amount.status === "Pending" ? (
-                    <Button onClick={() => this.cancelPendingPayments(amount)} />
-                  ) : null}
-                </td>
-              </tr>
-            );
-          })}
-          ;
-          <tfoot>
-            <tr>
-              <td />
-              <td />
-              <td>{this.sumValues()}</td>
-              <td>Total (GBP)</td>
-              <td />
-              <td />
-            </tr>
-          </tfoot>
-        </table>
+        </thead>
+        <tbody>
+          {this.state.paymentData
+            .filter((item) => item.status === this.props.filterFactor)
+            .map((item, index) => (
+              <TableRow
+                key={index}
+                payment={item}
+                cancelPendingPayments={() => this.cancelPendingPayments(item)}
+              />
+            ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td />
+            <td />
+            <td>
+              {this.state.paymentData.filter((item) => item.status === this.props.filterFactor)
+                .length === 0
+                ? "0.00"
+                : this.state.paymentData
+                    .filter((item) => item.status === this.props.filterFactor)
+                    .map((item) => {
+                      return item.amount / this.props.rates[item.currency];
+                    })
+                    .reduce((accumulator, current) => accumulator + current, 0)
+                    .toFixed(2)}
+            </td>
+            <td>Total (GBP)</td>
+            <td />
+            <td />
+          </tr>
+        </tfoot>
+      </table>
+    );
+  }
+}
+
+class Payments extends Component {
+  render() {
+    return (
+      <div>
+        <Table
+          paymentData={this.props.paymentData}
+          rates={this.props.rates}
+          filterFactor="Pending"
+        />
+        <Table
+          paymentData={this.props.paymentData}
+          rates={this.props.rates}
+          filterFactor="Complete"
+        />
       </div>
     );
   }

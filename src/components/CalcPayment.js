@@ -6,6 +6,7 @@ class Payment extends Component {
   constructor() {
     super();
     this.state = {
+      insertedAmount: 0.0,
       selectedCurrency: "USD",
       amount: 0
     };
@@ -25,25 +26,21 @@ class Payment extends Component {
       amount: amount
     });
   };
-
-  convertAmount = (event) => {
-    console.log(this.state.selectedCurrency);
-    var url = "https://api.exchangeratesapi.io/latest?base=GBP";
-    fetch(url)
-      .then((resp) => resp.json())
-      .then((rate) => {
-        let rateValue = rate.rates[this.state.selectedCurrency];
-        //console.log(rate.rates[this.state.selectedCurrency])
-        console.log(rateValue);
-        let result = this.state.amount * rateValue;
-        //console.log(result)
-
-        this.setState({
-          result: result
-        });
-      });
+  handleChange = (e) => {
+    const inputAmount = e.target.value;
+    this.setState({ insertedAmount: inputAmount });
+  };
+  convertAmount = (currency) => {
+    console.log(this.props.rates["USD"]);
+    return (this.state.insertedAmount / this.props.rates[currency]).toFixed(2);
   };
 
+  clickHandler = () => {
+    console.log(this.state.selectedCurrency);
+    this.setState({
+      amount: this.convertAmount(this.state.selectedCurrency)
+    });
+  };
   render() {
     return (
       <div className="CalcPayment">
@@ -55,14 +52,15 @@ class Payment extends Component {
             ))}
           </select>
           <input
-            onChange={this.handleAmount}
             className="CalcPayment-amount"
+            onChange={this.handleChange}
             type="Number"
-            defaultValue="0.00"
+            value={this.state.insertedAmount}
+            onFocus={() => this.setState({ insertedAmount: "" })}
           />
-          is worth <span className="CalcPayment-result">{this.state.result}</span> in GBP.
+          is worth <span className="CalcPayment-result">{this.state.amount}</span> in GBP.
           <div className="CalcPayment-calculate">
-            <Button onClick={this.convertAmount}>Calculate</Button>
+            <Button onClick={this.clickHandler}>Calculate</Button>
           </div>
         </div>
       </div>
