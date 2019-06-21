@@ -1,5 +1,5 @@
 .Payments {
-  order-collapse: collapse;
+  border-collapse: collapse;
   border: 1px solid #ccc;
   border-radius: 2px;
   box-shadow: 0 2px 0 #ccc;

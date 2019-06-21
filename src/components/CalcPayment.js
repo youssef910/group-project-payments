@@ -6,6 +6,7 @@ class Payment extends Component {
   constructor() {
     super();
     this.state = {
+      insertedAmount: 0.0,
       selectedCurrency: "USD",
       amount: 0
     };
@@ -18,6 +19,25 @@ class Payment extends Component {
     });
   };
 
+  handleAmount = (event) => {
+    const amount = event.target.value;
+    this.setState({
+      amount: amount
+    });
+  };
+  handleChange = (e) => {
+    const inputAmount = e.target.value;
+    this.setState({ insertedAmount: inputAmount });
+  };
+  convertAmount = (currency) => {
+    return (this.state.insertedAmount / this.props.rates[currency]).toFixed(2);
+  };
+
+  clickHandler = () => {
+    this.setState({
+      amount: this.convertAmount(this.state.selectedCurrency)
+    });
+  };
   render() {
     return (
       <div className="CalcPayment">
@@ -30,16 +50,15 @@ class Payment extends Component {
           </select>
           <input
             className="CalcPayment-amount"
-            type="text"
-            defaultValue="0.00"
-            onSubmit={(e) => {
-              this.addItem(e);
-            }}
+            onChange={this.handleChange}
+            type="Number"
+            value={this.state.insertedAmount}
+            onFocus={() => this.setState({ insertedAmount: "" })}
           />
-          is worth <span className="CalcPayment-result">??---=?</span> in GBP.
+          is worth <span className="CalcPayment-result">{this.state.amount}</span> in GBP.
           <div className="CalcPayment-calculate">
-            <Button>Calculate</Button>
-            <Button type="submit"> Make Payment </Button>
+            <Button onClick={this.clickHandler}>Calculate</Button>
+            <Button> Add payments </Button>
           </div>
         </div>
       </div>
