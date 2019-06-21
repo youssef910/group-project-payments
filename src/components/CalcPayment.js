@@ -58,6 +58,7 @@ class Payment extends Component {
           is worth <span className="CalcPayment-result">{this.state.amount}</span> in GBP.
           <div className="CalcPayment-calculate">
             <Button onClick={this.clickHandler}>Calculate</Button>
+            <Button> Add payments </Button>
           </div>
         </div>
       </div>
