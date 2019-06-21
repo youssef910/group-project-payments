@@ -21,8 +21,6 @@ class Balance extends Component {
           balanceInAlternateCurrency: (exchangeRates * newBalance).toFixed(2)
         });
       });
-    console.log("alternateCurrency");
-    console.log("currancies");
   }
 
   handleCurrencyUpdate = (event) => {
@@ -42,8 +40,8 @@ class Balance extends Component {
         </h2>
 
         <div className="Balance-alt">
-          Your balance is {this.state.balanceInAlternateCurrency} shows the balance on the webpage
-          in
+          Your balance is {this.state.balanceInAlternateCurrency}
+          {"      "}in
           <select defaultValue={this.state.alternateCurrency} onChange={this.handleCurrencyUpdate}>
             {this.props.currencies.map((currency, index) => (
               <option key={index}>{currency}</option>
