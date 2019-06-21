@@ -11,7 +11,7 @@ class Payment extends Component {
     };
   }
 
-  electCurrency = (event) => {
+  selectCurrency = (event) => {
     const currency = event.target.value;
     this.setState({
       selectedCurrency: currency
@@ -28,10 +28,18 @@ class Payment extends Component {
               <option key={index}>{currency}</option>
             ))}
           </select>
-          <input className="CalcPayment-amount" type="text" defaultValue="0.00" />
-          is worth <span className="CalcPayment-result">???</span> in GBP.
+          <input
+            className="CalcPayment-amount"
+            type="text"
+            defaultValue="0.00"
+            onSubmit={(e) => {
+              this.addItem(e);
+            }}
+          />
+          is worth <span className="CalcPayment-result">??---=?</span> in GBP.
           <div className="CalcPayment-calculate">
             <Button>Calculate</Button>
+            <Button type="submit"> Make Payment </Button>
           </div>
         </div>
       </div>
