@@ -21,7 +21,6 @@ class Payment extends Component {
 
   handleAmount = (event) => {
     const amount = event.target.value;
-    console.log(amount);
     this.setState({
       amount: amount
     });
@@ -31,12 +30,10 @@ class Payment extends Component {
     this.setState({ insertedAmount: inputAmount });
   };
   convertAmount = (currency) => {
-    console.log(this.props.rates["USD"]);
     return (this.state.insertedAmount / this.props.rates[currency]).toFixed(2);
   };
 
   clickHandler = () => {
-    console.log(this.state.selectedCurrency);
     this.setState({
       amount: this.convertAmount(this.state.selectedCurrency)
     });

@@ -34,19 +34,6 @@ class Table extends Component {
       paymentData: this.props.paymentData
     };
   }
-
-  sumValues = () =>
-    this.state.paymentData
-      .reduce((accumulator, current) => accumulator + current.amount, 0)
-      .toFixed(2);
-
-  netValue = () =>
-    this.state.paymentData
-      .filter((element) => {
-        return element.status !== "Pending";
-      })
-      .reduce((accumulator, current) => accumulator + current.amount, 0);
-
   cancelPendingPayments = (amount) => {
     this.setState({ paymentData: this.state.paymentData.filter((payment) => payment !== amount) });
   };
