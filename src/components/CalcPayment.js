@@ -3,12 +3,13 @@ import Button from "./Button";
 import "./CalcPayment.css";
 
 class Payment extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       insertedAmount: 0.0,
       selectedCurrency: "USD",
-      amount: 0
+      amount: 0,
+      paymentDataAdd: props.paymentData
     };
   }
 
@@ -38,6 +39,18 @@ class Payment extends Component {
       amount: this.convertAmount(this.state.selectedCurrency)
     });
   };
+
+  addPayment(e) {
+    e.preventDefault();
+    const { paymentDataAdd } = this.state;
+    const newPayment = this.newPayment.value;
+
+    this.setState({
+      paymentDataAdd: [...this.props.payment.amount, newPayment]
+    });
+    this.addForm.reset();
+  }
+
   render() {
     return (
       <div className="CalcPayment">
@@ -58,7 +71,22 @@ class Payment extends Component {
           is worth <span className="CalcPayment-result">{this.state.amount}</span> in GBP.
           <div className="CalcPayment-calculate">
             <Button onClick={this.clickHandler}>Calculate</Button>
-            <Button> Add payments </Button>
+
+            <form
+              ref={(input) => (this.addForm = input)}
+              className="form-inline"
+              onSubmit={(e) => {
+                this.addPayment(e);
+              }}>
+              <div>
+                <label> Pay here</label>
+                <input ref={(input) => (this.newPayment = input)} type="number" />
+              </div>
+              <Button type="submit" className="btn btn-primary">
+                {" "}
+                Make Payment{" "}
+              </Button>
+            </form>
           </div>
         </div>
       </div>
